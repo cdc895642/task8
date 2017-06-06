@@ -1,5 +1,6 @@
 package com.softserve.edu.task8.math;
 
+import java.io.PrintStream;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -11,9 +12,15 @@ import java.text.ParseException;
 public class Fibonacci {
     private int start;
     private int finish;
+    private PrintStream out;
 
     public Fibonacci(String[] args) {
         parseArgs(args);
+        out = System.out;
+    }
+
+    public void setOut(PrintStream out) {
+        this.out = out;
     }
 
     /**
@@ -30,7 +37,7 @@ public class Fibonacci {
 
             if (i >= start && i <= finish) {
                 String delimiter = i == finish ? "" : ", ";
-                System.out.print(before + delimiter);
+                out.print(before + delimiter);
             }
         }
     }
@@ -39,17 +46,23 @@ public class Fibonacci {
         final int START_NUM_INDEX = 0;
         final int END_NUM_INDEX = 1;
         if (args.length < 2) {
-            throw new IllegalArgumentException("Wrong input parameters. Please insert start and " +
-                    "end " +
-                    "integer values for print Fibonacci numbers in given range.");
+            throw new IllegalArgumentException("Wrong input parameters. "
+                    + "Please insert start and end "
+                    + "integer values for print Fibonacci numbers in given "
+                    + "range.");
         }
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
         try {
             start = numberFormat.parse(args[START_NUM_INDEX]).intValue();
             finish = numberFormat.parse(args[END_NUM_INDEX]).intValue();
+            if (start > finish) {
+                throw new ParseException("start value bigger than finish "
+                        + "one", 0);
+            }
         } catch (ParseException e) {
-            throw new IllegalArgumentException("Inserted incorrect value. Please insert positive " +
-                    "integer value !");
+            throw new IllegalArgumentException("Inserted incorrect value. "
+                    + "Please insert positive integer value ! Start value "
+                    + "must be smaller or equal than finish one");
         }
     }
 }
